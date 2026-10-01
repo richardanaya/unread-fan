@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Heian sprites</title>
+<style>
+  body { margin: 0; background: #10140c; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header, main { max-width: 920px; margin: 0 auto; padding: 24px 20px; }
+  h1 { font-weight: normal; font-size: 1.7rem; margin: 0 0 8px; }
+  h2 { font-weight: normal; margin: 26px 0 10px; }
+  p, a { color: #e7f0d4; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+  figure { margin: 0; }
+  figcaption { font: 13px/1.35 ui-sans-serif, system-ui, sans-serif; margin-top: 6px; }
+  figcaption small { display: block; color: #b7c4a4; }
+  .checker {
+    min-height: 180px; display: grid; place-items: end center;
+    background-color: #1c2418;
+    background-image:
+      linear-gradient(45deg, #12180f 25%, transparent 25%),
+      linear-gradient(-45deg, #12180f 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #12180f 75%),
+      linear-gradient(-45deg, transparent 75%, #12180f 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  }
+  img { image-rendering: pixelated; image-rendering: crisp-edges; }
+  #characters img { height: 150px; }
+  #items .checker { min-height: 180px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>A Heian court</h1>
+  <p>Same Sierra EGA pixels as the King's Quest set: hard edges, the game's own colors, transparent backgrounds. Everyone in the cast is drawn at the same height. The older gallery is still at <a href="kq1.html">kq1.html</a>. Every room is on <a href="scenes.html">scenes.html</a>. The game starts at <a href="index.html">index.html</a>.</p>
+</header>
+<main>
+  <h2>Cast</h2>
+  <div class="grid" id="characters"></div>
+  <h2>Things they carry</h2>
+  <div class="grid" id="items"></div>
+</main>
+<script>
+const characters = [
+  ["atsuhira", "Prince Atsuhira", "A young prince in court dress"],
+  ["shizuka", "Lady Shizuka", "A lady of the palace, hair to the floor"],
+  ["masahiro", "Abe no Masahiro", "An onmyōji"],
+  ["haru", "Minamoto no Haru", "A warrior of the capital"],
+  ["tamayori", "Tamayori", "A shrine maiden"],
+  ["gyoban", "Gyōban", "A yamabushi from the mountains"],
+  ["enkei", "Enkei", "An old monk"],
+  ["matsu", "Matsu", "A servant boy"],
+  ["kura", "Kura", "A farm woman in a plain brown kosode and straw sandals"],
+  ["yoshi", "Yoshi", "A miller in a gray work jacket, short hair, bare forearms"],
+  ["take", "Take", "A woodcutter in a dark green jacket, with a short beard"],
+  ["myoen", "Myōen", "An older shrine priest in white and pale blue, tall black cap"],
+  ["nabe", "Nabe", "A palace cook in a rust jacket and white headcloth"],
+  ["ito", "Ito", "A laundress in a faded blue kosode, hair tied up"],
+  ["aya", "Aya", "A seamstress in a soft pink kosode, hair in a loop"],
+  ["ue", "Ue", "A gardener in a moss-green jacket and straw hat"],
+  ["ban", "Ban", "A night watchman in a dark indigo hitatare and a small cap"],
+  ["ichi", "Ichi", "A market seller in an orange jacket and white leggings"],
+  ["wata", "Wata", "A ferryman in a brown jacket and a wrapped headcloth"],
+  ["iso", "Iso", "A fisher in a gray-blue jacket, bare lower legs"],
+  ["shio", "Shio", "A salt worker in a pale gray kosode and a sun hat"],
+  ["ai", "Ai", "A dyer with indigo-stained blue sleeves and dark hair tied back"],
+  ["mura", "Mura", "A village head, older, in a deep red kosode and a black cap"],
+  ["fune", "Fune", "A boat keeper in a sea-green jacket and straw sandals"],
+];
+const items = [
+  ["tachi", "Tachi", "Haru's sword"],
+  ["kagami", "Kagami", "A bronze mirror"],
+  ["biwa", "Biwa", "Lady Shizuka's lute"],
+  ["sensu", "Sensu", "A folding fan"],
+  ["ofuda", "Ofuda", "Masahiro's paper charm"],
+  ["magatama", "Magatama", "A curved jewel"],
+  ["yumi", "Yumi", "A longbow"],
+  ["koro", "Kōro", "An incense burner"],
+];
+const itemH = {
+  yumi: 168, biwa: 78, tachi: 72, sensu: 30,
+  ofuda: 34, kagami: 30, koro: 26, magatama: 20,
+};
+function fill(id, folder, list) {
+  const root = document.getElementById(id);
+  for (const [file, label, note] of list) {
+    const fig = document.createElement("figure");
+    const box = document.createElement("div");
+    box.className = "checker";
+    const img = document.createElement("img");
+    img.src = `assets/heian/${folder}/${file}.png`;
+    img.alt = label;
+    if (itemH[file]) img.style.height = itemH[file] + "px";
+    box.append(img);
+    const cap = document.createElement("figcaption");
+    cap.innerHTML = label + "<small>" + note + "</small>";
+    fig.append(box, cap);
+    root.append(fig);
+  }
+}
+fill("characters", "characters", characters);
+fill("items", "items", items);
+</script>
+</body>
+</html>

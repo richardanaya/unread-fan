@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The wash yard</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/wash.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The wash yard</h1>
+  <p>North is the <a href="kitchen.html?from=south">kitchen</a>. West, east, and south do not open. The gallery is <a href="assets.html">assets.html</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">The floor is stone, and the tubs sit against the walls. She looks west, toward the tubs. North is the kitchen. West, east, and south do not lead on.</p>
+<script>
+window.ROOM = {
+  still: [["characters/ito", 380, 150, 40, true]],
+  depth: 0.55,
+  x: 400,
+  faceLeft: false,
+  foot0: 240,
+  foot1: 468,
+  // Open stone on wash.png, inset around the tubs and the right basin. Half the prince's width keeps his feet on the paving.
+  xMin: function (d) {
+    var L = [405, 378, 280, 210, 220, 220, 48, 16];
+    var i = Math.min(6, Math.floor(d * 7));
+    var t = d * 7 - i;
+    return Math.max(0, L[i] + (L[i + 1] - L[i]) * t - 36);
+  },
+  xMax: function (d) {
+    var R = [446, 472, 600, 680, 660, 660, 820, 836];
+    var i = Math.min(6, Math.floor(d * 7));
+    var t = d * 7 - i;
+    return R[i] + (R[i + 1] - R[i]) * t + 36;
+  },
+  west: null,
+  east: null,
+  north: "kitchen.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

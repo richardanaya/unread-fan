@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The stone steps</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/steps.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The stone steps</h1>
+  <p>West is the <a href="cave.html?from=east">cave</a>. North is the <a href="peak.html?from=south">peak</a>. East is the <a href="cliff.html?from=west">cliff</a>. South is the <a href="forest.html?from=north">cedar forest</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one is on the steps. The treads run to the west cave, the east cliff, and the north peak. South, on the dirt, is the cedar forest.</p>
+<script>
+window.ROOM = {
+  still: [],
+  depth: 0.72,
+  x: 380,
+  faceLeft: false,
+  foot0: 208,
+  foot1: 468,
+  // Every tread and the near dirt run to both edges.
+  xMin: function () { return 0; },
+  xMax: function () { return 852; },
+  west: "cave.html",
+  east: "cliff.html",
+  north: "peak.html",
+  south: "forest.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

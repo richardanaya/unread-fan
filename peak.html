@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The peak shrine</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/peak.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The peak shrine</h1>
+  <p>South is the <a href="steps.html?from=north">steps</a> back down. The ridge ends west, east, and north.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Enkei stands on the dirt apron and looks west along the ridge. The only way down is south, onto the steps. The cliffs drop away on either side.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/enkei", 400, 150, 90, true],
+  ],
+  depth: 0.7,
+  x: 280,
+  faceLeft: false,
+  foot0: 278,
+  foot1: 468,
+  // Dirt apron narrows in the middle, then the stone steps widen toward the near edge.
+  xMin: function (d) {
+    if (d < 0.17) return 248 + (d / 0.17) * (308 - 248);
+    if (d < 0.45) return 308 + ((d - 0.17) / 0.28) * (320 - 308);
+    if (d < 0.6) return 320 + ((d - 0.45) / 0.15) * (296 - 320);
+    return 296 + ((d - 0.6) / 0.4) * (248 - 296);
+  },
+  xMax: function (d) {
+    if (d < 0.17) return 555 + (d / 0.17) * (525 - 555);
+    if (d < 0.45) return 525 + ((d - 0.17) / 0.28) * (566 - 525);
+    if (d < 0.6) return 566 + ((d - 0.45) / 0.15) * (588 - 566);
+    return 588 + ((d - 0.6) / 0.4) * (640 - 588);
+  },
+  west: null,
+  east: null,
+  north: null,
+  south: "steps.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The inner garden</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/inner-garden.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The inner garden</h1>
+  <p>West is the <a href="moon-deck.html?from=east">moon deck</a>. South is the <a href="hall.html?from=north">hall</a>. East is the <a href="east-wall.html?from=west">east wall</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">A koro sits on the near gravel. Ue stands on the gravel and looks west. West is open gravel to the moon deck. South, over the wooden threshold, is the hall. East is the east wall. The north wall does not open. He looks west, toward the pine.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["items/koro", 100, 26, 36, false],
+    ["characters/ue", 500, 150, 40, true],
+  ],
+  depth: 0.55,
+  x: 320,
+  faceLeft: false,
+  foot0: 288,
+  foot1: 468,
+  // Gravel runs off the left edge. The east wall steps back as the ground comes near.
+  xMin: function () { return 8; },
+  xMax: function (d) { return 630 + d * 210; },
+  west: "moon-deck.html",
+  east: "east-wall.html",
+  north: null,
+  south: "hall.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

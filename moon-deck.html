@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The moon deck</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/moon-deck.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The moon deck</h1>
+  <p>East is the <a href="inner-garden.html?from=west">inner garden</a>. West is the <a href="night-bridge.html?from=east">night bridge</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">A biwa lies on the near planks. East, the steps leave the deck for the inner garden. West is the night bridge. The rail, the water, and the sky block the north. There is no way south.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["items/biwa", 300, 78, 48, false],
+  ],
+  depth: 0.55,
+  x: 360,
+  faceLeft: false,
+  foot0: 292,
+  foot1: 468,
+  // Far deck is narrow beside the water. Near planks run to both edges.
+  xMin: function (d) { return d < 0.08 ? 28 : 8; },
+  xMax: function (d) { return d < 0.34 ? 615 + d * 500 : 852; },
+  eastMinDepth: 0.34,
+  west: "night-bridge.html",
+  east: "inner-garden.html",
+  north: null,
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

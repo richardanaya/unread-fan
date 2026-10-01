@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The drying yard</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/drying.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The drying yard</h1>
+  <p>North is the <a href="indigo.html?from=south">indigo</a>. West, east, and south do not lead on.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one is here. Poles and cloth stand over the dirt. North, at the far edge of the yard, is the indigo. West, east, and south do not lead on.</p>
+<script>
+window.ROOM = {
+  still: [],
+  depth: 0.55,
+  x: 360,
+  faceLeft: false,
+  foot0: 220,
+  foot1: 452,
+  // Open dirt between the cloth poles. Far edge is the narrow gap toward the vats.
+  xMin: function (d) {
+    var L = [336, 300, 250, 200, 140, 130, 110, 70];
+    var i = Math.min(6, Math.floor(d * 7));
+    var t = d * 7 - i;
+    return L[i] + (L[i + 1] - L[i]) * t;
+  },
+  xMax: function (d) {
+    var R = [510, 550, 600, 650, 720, 720, 740, 800];
+    var i = Math.min(6, Math.floor(d * 7));
+    var t = d * 7 - i;
+    return R[i] + (R[i + 1] - R[i]) * t;
+  },
+  west: null,
+  east: null,
+  north: "indigo.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

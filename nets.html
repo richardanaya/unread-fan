@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The nets</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/nets.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The nets</h1>
+  <p>South, across the sand, is the <a href="boatshed.html?from=north">boatshed</a>. North, west, and east do not leave.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">South is the boatshed. North, west, and east do not leave.</p>
+<script>
+window.ROOM = {
+  still: [],
+  depth: 0.62,
+  x: 390,
+  faceLeft: false,
+  foot0: 208,
+  foot1: 468,
+  xMin: function (d) {
+    if (d < 0.44) return 364 - d * 200;
+    return 16;
+  },
+  xMax: function (d) {
+    if (d < 0.44) return 500 + d * 200;
+    return 836;
+  },
+  west: null,
+  east: null,
+  north: null,
+  south: "boatshed.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

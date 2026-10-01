@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The indigo vats</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/indigo.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The indigo vats</h1>
+  <p>West is the <a href="dyer.html?from=east">dyer's lane</a>. South is the <a href="drying.html?from=north">drying yard</a>. North is the vat wall. East is the fence.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Ai stands by the vats and looks east. West is the dyer's lane. South is the drying yard. North and east do not lead on. She looks east, toward the vats.</p>
+<script>
+window.ROOM = {
+  still: [["characters/ai", 340, 150, 40, false]],
+  depth: 0.62,
+  x: 220,
+  faceLeft: false,
+  foot0: 268,
+  foot1: 470,
+  // Dirt is open along the west edge. The vat row and fence close the east.
+  xMin: function () { return 0; },
+  xMax: function (d) {
+    if (d < 0.42) return 700 - d * 160;
+    if (d < 0.72) return 633 - (d - 0.42) * 310;
+    return 540 + (d - 0.72) * 360;
+  },
+  west: "dyer.html",
+  east: null,
+  north: null,
+  south: "drying.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The ladies' rooms</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/ladies.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The ladies' rooms</h1>
+  <p>East opens back to the <a href="hall.html?from=west">hall</a>. West is the <a href="court-garden.html?from=east">court garden</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one is here. Shizuka stays in the courtyard. A mirror lies on the floor. East returns to the hall. West is the court garden. North and south do not leave.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["items/kagami", 240, 30, 40, false],
+  ],
+  depth: 0.72,
+  x: 400,
+  faceLeft: false,
+  foot0: 340,
+  foot1: 472,
+  xMin: function () { return 16; },
+  xMax: function () { return 852; },
+  west: "court-garden.html",
+  east: "hall.html",
+  north: null,
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

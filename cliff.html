@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The cliff path</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/cliff.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The cliff path</h1>
+  <p>West is the <a href="steps.html?from=east">stone steps</a>. The ledge ends to the east.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one else is on the ledge. The dirt meets the steps at the west edge. East is only the drop, and there is no path north or south.</p>
+<script>
+function edge(k, d) {
+  if (d <= k[0][0]) return k[0][1];
+  for (var i = 1; i < k.length; i++) {
+    if (d <= k[i][0]) {
+      var t = (d - k[i - 1][0]) / (k[i][0] - k[i - 1][0]);
+      return k[i - 1][1] + t * (k[i][1] - k[i - 1][1]);
+    }
+  }
+  return k[k.length - 1][1];
+}
+window.ROOM = {
+  still: [],
+  depth: 0.82,
+  x: 60,
+  faceLeft: true,
+  foot0: 264,
+  foot1: 470,
+  // Dirt only. The lip on the right is the drop; the steps take the west edge.
+  xMin: function (d) {
+    return edge([[0, 432], [0.20, 312], [0.25, 252], [0.32, 156], [0.42, 114], [0.50, 120], [0.62, 74], [0.74, 0], [1, 0]], d);
+  },
+  xMax: function (d) {
+    return edge([[0, 576], [0.35, 440], [0.60, 390], [0.80, 340], [1, 286]], d);
+  },
+  west: "steps.html",
+  east: null,
+  north: null,
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The reed marsh</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/marsh.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The reed marsh</h1>
+  <p>West is the <a href="ferry.html?from=east">ferry</a>. South is the <a href="shore.html?from=north">shore</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one is here. The dirt track runs west to the ferry and south, at the near edge, to the shore. Reeds and water are not the floor.</p>
+<script>
+// Dirt span at a foot Y: left and right edges of the raised track. The near plain touches both side edges.
+function marshBand(d) {
+  const y = 248 + d * (468 - 248);
+  const rows = [
+    [248, 196, 293],
+    [264, 182, 330],
+    [280, 228, 370],
+    [296, 247, 410],
+    [312, 269, 450],
+    [328, 286, 490],
+    [344, 305, 531],
+    [360, 318, 572],
+    [376, 335, 617],
+    [392, 316, 852],
+    [399, 316, 852],
+    [400, 0, 852],
+    [468, 0, 852],
+  ];
+  let i = 1;
+  while (i < rows.length && y > rows[i][0]) i++;
+  if (i >= rows.length) i = rows.length - 1;
+  const a = rows[i - 1];
+  const b = rows[i];
+  const t = (y - a[0]) / (b[0] - a[0]);
+  return [a[1] + t * (b[1] - a[1]), a[2] + t * (b[2] - a[2])];
+}
+window.ROOM = {
+  still: [],
+  depth: 0.72,
+  x: 280,
+  faceLeft: true,
+  foot0: 248,
+  foot1: 468,
+  xMin: function (d) { return marshBand(d)[0]; },
+  xMax: function (d) { return marshBand(d)[1]; },
+  west: "ferry.html",
+  east: null,
+  north: null,
+  south: "shore.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

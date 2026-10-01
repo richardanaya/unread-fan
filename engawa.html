@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The engawa</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/engawa.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The engawa</h1>
+  <p>North is the <a href="hall.html?from=south">hall</a>. South is the <a href="scene.html?from=north">courtyard</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Matsu stands on the boards and looks toward the yard. North, the doorway leads into the hall. South, the open yard returns to the courtyard. The side rails and the posts are not ground.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/matsu", 380, 150, 150, false],
+  ],
+  depth: 0.28,
+  x: 500,
+  faceLeft: true,
+  // Far threshold of the boards, then the near stone of the yard.
+  foot0: 276,
+  foot1: 470,
+  // Pillars pinch the deck until the near apron; the yard is open.
+  xMin: function (d) {
+    if (d < 0.36) return 322 - (d / 0.36) * (322 - 274);
+    if (d < 0.44) return 274 - ((d - 0.36) / 0.08) * 274;
+    return 0;
+  },
+  xMax: function (d) {
+    if (d < 0.18) return 562 + (d / 0.18) * (628 - 562);
+    if (d < 0.36) return 632;
+    if (d < 0.44) return 632 + ((d - 0.36) / 0.08) * (852 - 632);
+    return 852;
+  },
+  west: null,
+  east: null,
+  north: "hall.html",
+  south: "scene.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The ferry landing</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/ferry.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The ferry landing</h1>
+  <p>East is the <a href="marsh.html?from=west">marsh</a>. North is the <a href="river.html?from=south">river</a>. West is the <a href="landing-west.html?from=east">west landing</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Wata stands on the landing and looks west. East, the dirt runs into the reeds and on to the marsh. North, the path climbs the bank toward the river. West, across the water, is the far landing. The water stays behind the boards. He looks west, toward the far landing.</p>
+<script>
+window.ROOM = {
+  still: [["characters/wata", 420, 150, 40, true]],
+  depth: 0.7,
+  x: 240,
+  faceLeft: false,
+  foot0: 250,
+  foot1: 470,
+  // Far feet stay on the bank path. Near feet stay on the planks and the east dirt.
+  xMin: function (d) { return 340 - d * 300; },
+  xMax: function (d) { return d < 0.36 ? 500 + d * (352 / 0.36) : 852; },
+  eastMinDepth: 0.36,
+  west: "landing-west.html",
+  east: "marsh.html",
+  north: "river.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

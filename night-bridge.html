@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The night bridge</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/night-bridge.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The night bridge</h1>
+  <p>East is the <a href="moon-deck.html?from=west">moon deck</a>. North is the <a href="bamboo.html?from=south">bamboo path</a>. The rail stops the west. The water is below the planks.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">East along the near planks is the moon deck. North, the boards meet the bamboo. There is no way west or south. He looks east, toward the palace.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/ban", 280, 150, 48, false],
+  ],
+  depth: 0.62,
+  x: 480,
+  faceLeft: false,
+  foot0: 302,
+  foot1: 462,
+  // Far path is the narrow mouth into the bamboo. Near planks run to the east edge.
+  xMin: function (d) { return 400 - d * 170; },
+  xMax: function (d) { return d < 0.45 ? 490 + d * 804 : 852; },
+  eastMinDepth: 0.45,
+  west: null,
+  east: "moon-deck.html",
+  north: "bamboo.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

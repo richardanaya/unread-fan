@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The courtyard</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/courtyard.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The courtyard</h1>
+  <p>West is the <a href="shrine.html?from=east">shrine path</a>. North is the <a href="engawa.html?from=south">engawa</a>. East stops at the trees. The gallery is <a href="assets.html">assets.html</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Lady Shizuka is on the veranda, looking down at the yard. Abe no Masahiro stands closer and faces the trees, with his ofuda on the ground beside him. North is the engawa.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/shizuka", 250, 150, 132, false],
+    ["characters/masahiro", 470, 150, 34, false],
+    ["items/ofuda", 575, 34, 34, false],
+  ],
+  depth: 0.45,
+  x: 330,
+  faceLeft: true,
+  foot0: 352,
+  foot1: 470,
+  xMin: function () { return 120; },
+  xMax: function () { return 670; },
+  west: "shrine.html",
+  east: null,
+  north: "engawa.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/rooms.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The farmhouse</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/farm.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The farmhouse</h1>
+  <p>East is the <a href="rice.html?from=west">rice causeway</a>. West stops at the farmhouse. North and south stay in the yard.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">East is the rice causeway. The yard does not continue north, south, or west. She looks east, toward the rice fields.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/kura", 340, 150, 48, false],
+  ],
+  depth: 0.55,
+  x: 460,
+  faceLeft: true,
+  foot0: 330,
+  foot1: 466,
+  xMin: function () { return 20; },
+  xMax: function (d) { return d < 0.3 ? 720 : 852; },
+  eastMinDepth: 0.3,
+  west: null,
+  east: "rice.html",
+  north: null,
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

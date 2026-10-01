@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The east wall</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/east-wall.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The east wall</h1>
+  <p>West is the <a href="inner-garden.html?from=east">inner garden</a>. East, north, and south do not open.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Gravel runs along the palace wall and off the west edge, back to the inner garden. The wall closes the east. North and south do not open.</p>
+<script>
+window.ROOM = {
+  still: [],
+  depth: 0.55,
+  x: 200,
+  faceLeft: false,
+  foot0: 236,
+  foot1: 448,
+  // Gravel reaches the west edge. The wall base steps in as the ground goes far.
+  xMin: function () { return 8; },
+  xMax: function (d) { return 392 + d * 290; },
+  west: "inner-garden.html",
+  east: null,
+  north: null,
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

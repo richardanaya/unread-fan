@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The shrine hall</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/shrine-hall.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The shrine hall</h1>
+  <p>West is the <a href="purification.html?from=east">purification basin</a>. East is the <a href="offering.html?from=west">offering room</a>. North is the <a href="bell.html?from=south">bell</a>. South is the <a href="shrine.html?from=north">shrine path</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">South steps go back down to the shrine path. West is the purification basin. East is the offering room. North is the bell. He looks west, toward the side door.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/myoen", 400, 150, 70, true],
+  ],
+  depth: 0.5,
+  x: 380,
+  faceLeft: false,
+  foot0: 322,
+  foot1: 468,
+  // Wood widens toward the lip, then the gray steps are narrower and widen again at the near edge.
+  xMin: function (d) {
+    if (d < 0.34) return 88 - d * (48 / 0.34);
+    return 176 - ((d - 0.34) / 0.66) * 56;
+  },
+  xMax: function (d) {
+    if (d < 0.34) return 760 + d * (50 / 0.34);
+    return 676 + ((d - 0.34) / 0.66) * 52;
+  },
+  west: "purification.html",
+  east: "offering.html",
+  north: "bell.html",
+  south: "shrine.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The shrine path</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/shrine.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The shrine path</h1>
+  <p>West is the <a href="forest.html?from=east">forest</a>. East is the <a href="scene.html?from=west">courtyard</a>. South, on the near path, is the <a href="market.html?from=north">market</a>. North is the <a href="shrine-hall.html?from=south">shrine hall</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Tamayori stands at the foot of the steps and looks down the path, toward the forest. Gyōban stands nearer, on the dirt, and looks toward her. The pond blocks the east side until you come down onto the near path. The market is on the near edge. North, through the shrine, is the hall.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["characters/tamayori", 300, 150, 128, true],
+    ["characters/gyoban", 150, 150, 40, false],
+  ],
+  depth: 0.7,
+  x: 480,
+  faceLeft: true,
+  foot0: 340,
+  foot1: 462,
+  xMin: function () { return 40; },
+  // The pond covers the right side until the near gray path.
+  xMax: function (d) { return d < 0.62 ? 470 : 820; },
+  eastMinDepth: 0.62,
+  west: "forest.html",
+  east: "scene.html",
+  north: "shrine-hall.html",
+  south: "market.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

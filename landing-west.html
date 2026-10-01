@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The far landing</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/landing-west.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The far landing</h1>
+  <p>East is the <a href="ferry.html?from=west">ferry</a>. North is the <a href="village.html?from=south">village</a>. West and south stop at the water.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">East, the dirt runs to the ferry crossing. North, the lane climbs toward the village. The water stays off the path.</p>
+<script>
+window.ROOM = {
+  still: [],
+  depth: 0.72,
+  x: 400,
+  faceLeft: false,
+  foot0: 248,
+  foot1: 462,
+  // Far feet stay on the dirt lane. Near feet stay on the planks; the right bank opens toward the ferry.
+  xMin: function (d) { return 376 - d * 110; },
+  xMax: function (d) {
+    if (d < 0.22) return 476 + d * 180;
+    return Math.min(852, 516 + (d - 0.22) * (336 / 0.12));
+  },
+  eastMinDepth: 0.34,
+  west: null,
+  east: "ferry.html",
+  north: "village.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

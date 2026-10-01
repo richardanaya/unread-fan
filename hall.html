@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The great hall</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/hall.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The great hall</h1>
+  <p>West is the <a href="ladies.html?from=east">ladies' rooms</a>. East is the <a href="storehouse.html?from=west">storehouse</a>. North is the <a href="inner-garden.html?from=south">inner garden</a>. South is the <a href="engawa.html?from=north">engawa</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one else is here. A sensu lies on the boards near the middle. The south doors stand open on the purple evening. North, through the far doors, is the inner garden. South is the engawa. West is the ladies' rooms. East is the storehouse. Stay on the wood; the open sides drop away.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["items/sensu", 390, 30, 50, false],
+  ],
+  depth: 0.55,
+  x: 360,
+  faceLeft: false,
+  foot0: 256,
+  foot1: 468,
+  // Floor is a trapezoid: narrow at the far doors, wide on the near boards.
+  xMin: function (d) { return 280 - d * 260; },
+  xMax: function (d) { return 555 + d * 275; },
+  west: "ladies.html",
+  east: "storehouse.html",
+  north: "inner-garden.html",
+  south: "engawa.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

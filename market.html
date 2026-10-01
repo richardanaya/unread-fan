@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The market lane</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/market.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The market lane</h1>
+  <p>West is the <a href="river.html?from=east">river</a>. East is the <a href="bridge.html?from=west">bridge</a>. North is the <a href="shrine.html?from=south">shrine</a>. South is the <a href="dyer.html?from=north">dyer</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">Ichi stands at the stalls and looks east. A yumi lies on the near dirt. North, the lane runs on toward the shrine trees. South is the dyer. West is the river. East is the bridge. She looks east, down the lane.</p>
+<script>
+window.ROOM = {
+  still: [
+    ["items/yumi", 500, 168, 30, false],
+    ["characters/ichi", 260, 150, 36, false],
+  ],
+  depth: 0.55,
+  x: 390,
+  faceLeft: false,
+  foot0: 278,
+  foot1: 470,
+  // Dirt lane, widening toward the foreground. Edges follow the stone curbs.
+  xMin: function (d) {
+    var y = 278 + d * 192;
+    return 426 - (y - 240) * (333 / 236) + 6;
+  },
+  xMax: function (d) {
+    var y = 278 + d * 192;
+    return 426 + (y - 240) * (333 / 236) - 6;
+  },
+  west: "river.html",
+  east: "bridge.html",
+  north: "shrine.html",
+  south: "dyer.html",
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>

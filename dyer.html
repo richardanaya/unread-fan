@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/heian/screen.css">
+<meta charset="utf-8">
+<title>The dyer's lane</title>
+<style>
+  body { margin: 0; background: #0c0e0a; color: #e7f0d4; font: 16px/1.45 Georgia, serif; }
+  header { max-width: 852px; margin: 0 auto; padding: 20px 16px 8px; }
+  h1 { font-weight: normal; font-size: 1.5rem; margin: 0 0 6px; }
+  a { color: #e7f0d4; }
+  .stage {
+    position: relative; width: 852px; height: 480px; margin: 12px auto 28px;
+    background: url("assets/heian/scene/dyer.png") 0 0 / 852px 480px no-repeat;
+    image-rendering: pixelated; overflow: hidden;
+  }
+  .sprite { position: absolute; image-rendering: pixelated; image-rendering: crisp-edges; width: auto; pointer-events: none; }
+  p.note { max-width: 852px; margin: 0 auto 32px; padding: 0 16px; font: 14px/1.4 ui-sans-serif, system-ui, sans-serif; color: #c5d2b0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The dyer's lane</h1>
+  <p>North is the <a href="market.html?from=south">market</a>. East is the <a href="indigo.html?from=west">indigo</a>. The gallery is <a href="assets.html">assets.html</a>.</p>
+</header>
+<div class="stage" id="stage"></div>
+<p class="note">No one is here. Cloth poles line the dirt. North, where the lane narrows, is the market. East is the indigo. West and south do not lead on.</p>
+<script>
+window.ROOM = {
+  still: [],
+  depth: 0.7,
+  x: 390,
+  faceLeft: false,
+  foot0: 248,
+  foot1: 468,
+  // Dirt edges on dyer.png. Half the prince's width keeps his feet on the lane, not the grass.
+  xMin: function (d) {
+    var L = [406, 370, 333, 293, 249, 206, 153, 97, 27];
+    var i = Math.min(7, Math.floor(d * 8));
+    var t = d * 8 - i;
+    return Math.max(0, L[i] + (L[i + 1] - L[i]) * t + 6 - 36);
+  },
+  xMax: function (d) {
+    var R = [467, 504, 541, 579, 625, 667, 721, 762, 826];
+    var i = Math.min(7, Math.floor(d * 8));
+    var t = d * 8 - i;
+    return R[i] + (R[i + 1] - R[i]) * t - 6 + 36;
+  },
+  west: null,
+  east: "indigo.html",
+  north: "market.html",
+  south: null,
+};
+</script>
+<script src="assets/heian/play.js"></script>
+<script src="assets/heian/walk.js"></script>
+</body>
+</html>
