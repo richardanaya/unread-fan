@@ -25,14 +25,14 @@
     background-position: 0 0, 0 8px, 8px -8px, -8px 0;
   }
   img { image-rendering: pixelated; image-rendering: crisp-edges; }
-  #characters img { height: 150px; }
+  #characters img { height: auto; }
   #items .checker { min-height: 180px; }
 </style>
 </head>
 <body>
 <header>
   <h1>A Heian court</h1>
-  <p>Same Sierra EGA pixels as the King's Quest set: hard edges, the game's own colors, transparent backgrounds. Everyone in the cast is drawn at the same height.</p>
+  <p>Same Sierra EGA pixels as the King's Quest set: hard edges, the game's own colors, transparent backgrounds. Standing height follows age and sex. A young man is the 150px measure.</p>
 </header>
 <main>
   <h2>Cast</h2>
@@ -61,6 +61,10 @@ const items = [
   ["yumi", "Yumi", "A longbow"],
   ["koro", "Kōro", "An incense burner"],
 ];
+const stature = {
+  atsuhira: 150, haru: 158, gyoban: 156, masahiro: 150,
+  shizuka: 140, enkei: 134, tamayori: 130, matsu: 108,
+};
 const itemH = {
   yumi: 168, biwa: 78, tachi: 72, sensu: 30,
   ofuda: 34, kagami: 30, koro: 26, magatama: 20,
@@ -74,6 +78,7 @@ function fill(id, folder, list) {
     const img = document.createElement("img");
     img.src = `assets/heian/${folder}/${file}.png`;
     img.alt = label;
+    if (stature[file]) img.style.height = stature[file] + "px";
     if (itemH[file]) img.style.height = itemH[file] + "px";
     box.append(img);
     const cap = document.createElement("figcaption");

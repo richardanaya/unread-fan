@@ -25,14 +25,14 @@
     background-position: 0 0, 0 8px, 8px -8px, -8px 0;
   }
   img { image-rendering: pixelated; image-rendering: crisp-edges; }
-  #characters img { height: 150px; }
+  #characters img { height: auto; }
   #items .checker { min-height: 180px; }
 </style>
 </head>
 <body>
 <header>
   <h1>A Heian court</h1>
-  <p>Same Sierra EGA pixels as the King's Quest set: hard edges, the game's own colors, transparent backgrounds. Everyone in the cast is drawn at the same height. The older gallery is still at <a href="kq1.html">kq1.html</a>. Every room is on <a href="scenes.html">scenes.html</a>. The game starts at <a href="index.html">index.html</a>.</p>
+  <p>Same Sierra EGA pixels as the King's Quest set: hard edges, the game's own colors, transparent backgrounds. Standing height follows age and sex. A young man is the 150px measure, a woman stands a little shorter, an old man shorter still, and a boy well below them. The older gallery is still at <a href="kq1.html">kq1.html</a>. Every room is on <a href="scenes.html">scenes.html</a>. The game starts at <a href="index.html">index.html</a>.</p>
 </header>
 <main>
   <h2>Cast</h2>
@@ -77,6 +77,16 @@ const items = [
   ["yumi", "Yumi", "A longbow"],
   ["koro", "Kōro", "An incense burner"],
 ];
+const stature = {
+  atsuhira: 150,
+  haru: 158, gyoban: 156, take: 154, ban: 152,
+  masahiro: 150, yoshi: 150, wata: 150, fune: 150,
+  ue: 148, iso: 148,
+  myoen: 140, mura: 138, enkei: 134,
+  shizuka: 140, kura: 138, nabe: 136, shio: 136, ai: 136,
+  ito: 134, aya: 134, ichi: 134, tamayori: 130,
+  matsu: 108,
+};
 const itemH = {
   yumi: 168, biwa: 78, tachi: 72, sensu: 30,
   ofuda: 34, kagami: 30, koro: 26, magatama: 20,
@@ -90,6 +100,7 @@ function fill(id, folder, list) {
     const img = document.createElement("img");
     img.src = `assets/heian/${folder}/${file}.png`;
     img.alt = label;
+    if (stature[file]) img.style.height = stature[file] + "px";
     if (itemH[file]) img.style.height = itemH[file] + "px";
     box.append(img);
     const cap = document.createElement("figcaption");

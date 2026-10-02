@@ -31,21 +31,23 @@ window.ROOM = {
     ["characters/tamayori", 300, 150, 128, true],
     ["characters/gyoban", 150, 150, 40, false],
   ],
-  depth: 0.7,
+  depth: 0.81,
   x: 480,
   faceLeft: true,
-  foot0: 340,
+  foot0: 268,
   foot1: 462,
+  fromNorth: 0.45,
   xMin: function () { return 40; },
   // The pond covers the right side until the near gray path.
-  xMax: function (d) { return d < 0.62 ? 470 : 820; },
-  eastMinDepth: 0.62,
+  xMax: function (d) { return d < 0.76 ? 470 : 820; },
+  eastMinDepth: 0.76,
   west: "forest.html",
   east: "scene.html",
   north: "shrine-hall.html",
   south: "market.html",
 };
 </script>
+<script src="assets/heian/music.js"></script>
 <script src="assets/heian/play.js"></script>
 <script src="assets/heian/walk.js"></script>
 </body>

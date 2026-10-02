@@ -1,8 +1,23 @@
-// Shared walk for the three rooms. Farther is higher on the screen. Size does not change.
+// Farther is higher on the screen. Size does not change with depth.
+// Standing height follows age and sex. Prince Atsuhira, a young man, is the 150px measure.
 (function () {
   const H = 480;
   const CHAR_H = 150;
   const WIDTH = CHAR_H * (93 / 195);
+  const STATURE = {
+    atsuhira: 150,
+    haru: 158, gyoban: 156, take: 154, ban: 152,
+    masahiro: 150, yoshi: 150, wata: 150, fune: 150,
+    ue: 148, iso: 148,
+    myoen: 140, mura: 138, enkei: 134,
+    shizuka: 140, kura: 138, nabe: 136, shio: 136, ai: 136,
+    ito: 134, aya: 134, ichi: 134, tamayori: 130,
+    matsu: 108,
+  };
+  function statureOf(file) {
+    const id = String(file || "").split("/").pop();
+    return STATURE[id] || CHAR_H;
+  }
   const stage = document.getElementById("stage");
   let here = "scene";
   window.HeianHere = here;
@@ -24,11 +39,24 @@
       img.src = "assets/heian/" + file + ".png";
       img.alt = "";
       img.style.left = sx + "px";
-      img.style.height = (file.startsWith("characters/") ? CHAR_H : h) + "px";
+      const person = file.startsWith("characters/");
+      const drawH = person ? statureOf(file) : h;
+      img.style.height = drawH + "px";
       img.style.bottom = bottom + "px";
-      if (face) img.style.transform = "scaleX(-1)";
+      // The yumi sprite is upright. On the market lane it lies on the dirt,
+      // angled with the road. Its ground line is the center of that sprite.
+      let foot = H - bottom;
+      if (file === "items/yumi") {
+        img.style.transformOrigin = "center center";
+        img.style.transform = "rotate(-62deg)";
+        foot = H - (bottom + drawH / 2);
+      } else if (face) {
+        img.style.transform = "scaleX(-1)";
+      }
       stage.append(img);
-      placed.push({ img, foot: H - bottom });
+      const fileName = file.split("/").pop();
+      const wide = person ? WIDTH * (drawH / CHAR_H) : h;
+      placed.push({ img, name: fileName, x: sx, w: wide, foot: foot });
     }
   }
 
@@ -62,9 +90,12 @@
     x = room.x;
     faceLeft = room.faceLeft;
     if (from === "east" || from === "west" || from === "south") depth = 0.92;
-    if (from === "north") depth = 0.08;
+    if (from === "north") depth = room.fromNorth == null ? 0.08 : room.fromNorth;
     if (from === "west") { x = room.xMin(0.92) + 8; faceLeft = false; }
     if (from === "east") { x = room.xMax(0.92) - WIDTH - 8; faceLeft = true; }
+    const minX = room.xMin(depth);
+    const maxX = room.xMax(depth) - WIDTH;
+    x = Math.max(minX, Math.min(maxX, x));
   }
   let frame = 0;
   let acc = 0;
@@ -74,7 +105,7 @@
 
   function placePrince() {
     const foot = footAt(depth);
-    prince.style.height = CHAR_H + "px";
+    prince.style.height = statureOf("atsuhira") + "px";
     prince.style.bottom = (H - foot) + "px";
     prince.style.left = x + "px";
     prince.style.transform = faceLeft ? "scaleX(-1)" : "";
@@ -92,9 +123,13 @@
     if (keys.ArrowDown) { depth += 0.45 * dt; moving = true; }
     depth = Math.max(0, Math.min(1, depth));
     if (keys.ArrowUp && room.north && depth <= 0) {
-      enter(room.north, "south");
-      requestAnimationFrame(tick);
-      return;
+      const span = room.northSpan;
+      const cx = x + WIDTH / 2;
+      if (!span || (cx >= span[0] && cx <= span[1])) {
+        enter(room.north, "south");
+        requestAnimationFrame(tick);
+        return;
+      }
     }
     if (keys.ArrowDown && room.south && depth >= 1) {
       enter(room.south, "north");
@@ -144,7 +179,10 @@
     if (window.HeianPlay && window.HeianPlay.arrive) window.HeianPlay.arrive(stage);
   }
   window.HeianEnter = enter;
-  window.HeianPose = () => ({ x, depth, faceLeft });
+  window.HeianPose = () => ({ x, depth, faceLeft, foot: footAt(depth), w: WIDTH });
+  window.HeianThings = () => placed
+    .filter((p) => p.img.style.visibility !== "hidden")
+    .map((p) => ({ name: p.name, x: p.x, w: p.w, foot: p.foot }));
   window.HeianStand = (pose) => {
     if (!pose || typeof pose.x !== "number") return;
     x = pose.x;

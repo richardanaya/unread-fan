@@ -78,7 +78,7 @@
 
   const ACTIONS = [
     { id: "help", match: "help, what can i do, how do i play",
-      say: "Type what the prince should do. Look, take, talk, read, ask. Ask anyone what they like to talk about. Arrow keys still walk. The score is the case." },
+      say: "Type what the prince should do. You can look from anywhere. Walk up to a person or a thing before you talk, take, or use it. Ask anyone what they like to talk about. Arrow keys still walk. The score is the case." },
     { id: "score", match: "score, how many points, what is my score",
       say: () => `Score: ${state.score} of ${MAX}.` },
     { id: "inventory", match: "inventory, what am i carrying, look in my pockets",
@@ -281,6 +281,80 @@
     return ACTIONS.filter((a) => !a.room || a.room === id);
   }
 
+  // open-jev picks the attempt from the phrases it is shown. Distance is not a
+  // reason to hide talk, take, or use: if those phrases are missing, the model
+  // answers "none" and the prince never hears that he should walk closer.
+  // Looking stays open from anywhere. The reach check runs after the match.
+  const GROUND = new Set(["gravel", "floor", "path", "sand", "dirt", "planks", "boards", "lane", "road", "causeway", "stones", "yard", "track", "ledge", "stairs", "steps", "bank", "stain"]);
+  const BESIDE = { dx: 100, dy: 48 };
+  const SCRIPTED_NEAR = {
+    take_ofuda: "ofuda", talk_shizuka: "shizuka", talk_masahiro: "masahiro",
+    take_sensu: "sensu", read_sensu: "sensu", talk_aya: "aya",
+    talk_myoen: "myoen", talk_enkei: "enkei",
+  };
+
+  function carried(name) {
+    if (name === "tachi") return !!state.flags.tachi_held;
+    return !!state.flags[name];
+  }
+
+  function peopleHere() {
+    const place = PLACES[roomId()] || {};
+    return Object.keys(place).filter((name) => FOLK[name] && present(name));
+  }
+
+  function beside(name) {
+    if (FOLK[name] && !present(name)) return true;
+    if (carried(name)) return true;
+    const pose = window.HeianPose && window.HeianPose();
+    if (!pose) return true;
+    const things = (window.HeianThings && window.HeianThings()) || [];
+    const hit = things.find((thing) => thing.name === name);
+    if (hit) {
+      const dx = (pose.x + pose.w / 2) - (hit.x + hit.w / 2);
+      const dy = pose.foot - hit.foot;
+      return Math.abs(dx) < BESIDE.dx && Math.abs(dy) < BESIDE.dy;
+    }
+    if (GROUND.has(name)) return true;
+    return pose.depth < 0.42;
+  }
+
+  function targetOf(actionId) {
+    if (Object.prototype.hasOwnProperty.call(SCRIPTED_NEAR, actionId)) return SCRIPTED_NEAR[actionId];
+    const kind = actionId.split("_")[0];
+    if (kind === "see" || kind === "look" || actionId === "greet_all") return null;
+    if (kind === "topic") {
+      const rest = actionId.slice(6);
+      return Object.keys(FOLK).find((key) => rest.startsWith(key + "_")) || null;
+    }
+    if (["nudge", "ask", "pocket", "try", "greet", "likes"].includes(kind)) {
+      const safe = actionId.slice(kind.length + 1);
+      const place = PLACES[roomId()] || {};
+      return Object.keys(place).find((key) => key.replace(/[^a-z0-9]/g, "") === safe) || safe;
+    }
+    return null;
+  }
+
+  function tooFar(actionId) {
+    if (actionId === "greet_all") {
+      return peopleHere().some((name) => beside(name)) ? null : "You are not close enough to greet anyone.";
+    }
+    const name = targetOf(actionId);
+    if (!name || beside(name)) return null;
+    const who = NAMES[name] || ("the " + name);
+    return "You are not close enough to interact with " + who + ".";
+  }
+
+  function reachNote() {
+    const place = PLACES[roomId()] || {};
+    const names = Object.keys(place).filter((name) => name !== "look");
+    const near = names.filter((name) => beside(name));
+    const far = names.filter((name) => !beside(name));
+    return "The prince can look at anything from here. He can talk, take, move, or use only what he is standing next to."
+      + " Beside him: " + (near.length ? near.join(", ") : "nothing he can touch") + "."
+      + (far.length ? " Too far to interact with: " + far.join(", ") + "." : "");
+  }
+
   function mapperActions() {
     const list = legal().map((a) => ({ id: a.id, match: a.match }));
     const place = PLACES[roomId()] || {};
@@ -330,8 +404,7 @@
     let name = "";
     let topicId = "";
     if (actionId === "greet_all") {
-      const place = PLACES[roomId()] || {};
-      const lines = Object.keys(place).filter((key) => FOLK[key] && present(key)).map((key) => FOLK[key].greet);
+      const lines = peopleHere().filter((key) => beside(key)).map((key) => FOLK[key].greet);
       return lines.length ? lines.join(" ") : "No one is here to greet.";
     }
     if (actionId.startsWith("greet_")) name = actionId.slice(6);
@@ -358,6 +431,11 @@
   }
 
   function runMapped(actionId, stage) {
+    const far = tooFar(actionId);
+    if (far) {
+      print(far);
+      return;
+    }
     const about = folkLine(actionId);
     if (about) {
       print(about);
@@ -1217,7 +1295,7 @@
       try {
         const mapped = await mapInBrowser(
           typed,
-          (PLACES[roomId()] && PLACES[roomId()].look) || "",
+          ((PLACES[roomId()] && PLACES[roomId()].look) || "") + " " + reachNote(),
           previous,
           mapperActions(),
         );
@@ -1250,6 +1328,7 @@
       state.started = true;
       playingNow = true;
       document.body.classList.add("playing");
+      if (window.HeianMusic) window.HeianMusic.start();
       title.remove();
       input.disabled = false;
       input.focus();

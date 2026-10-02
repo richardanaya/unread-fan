@@ -591,7 +591,7 @@ window.HEIAN_ROOMS["market"] = (function () {
 
 const room = {
   still: [
-    ["items/yumi", 500, 168, 30, false],
+    ["items/yumi", 591, 146, -33, false],
     ["characters/ichi", 260, 150, 36, false],
   ],
   depth: 0.55,
@@ -1005,16 +1005,18 @@ const room = {
   depth: 0.5,
   x: 380,
   faceLeft: false,
-  foot0: 322,
-  foot1: 468,
-  // Wood widens toward the lip, then the gray steps are narrower and widen again at the near edge.
+  // Depth 0 is the back wall, under the dark door. The bell is only that opening.
+  foot0: 276,
+  foot1: 470,
+  northSpan: [375, 476],
+  // The deck widens toward the lip. The gray steps start there, narrower, then widen at the near edge.
   xMin: function (d) {
-    if (d < 0.34) return 88 - d * (48 / 0.34);
-    return 176 - ((d - 0.34) / 0.66) * 56;
+    if (d < 0.5) return 200 - d * (120 / 0.5);
+    return 156 - ((d - 0.5) / 0.5) * 56;
   },
   xMax: function (d) {
-    if (d < 0.34) return 760 + d * (50 / 0.34);
-    return 676 + ((d - 0.34) / 0.66) * 52;
+    if (d < 0.5) return 660 + d * (120 / 0.5);
+    return 696 + ((d - 0.5) / 0.5) * 54;
   },
   west: "purification",
   east: "offering",
@@ -1033,15 +1035,17 @@ const room = {
     ["characters/tamayori", 300, 150, 128, true],
     ["characters/gyoban", 150, 150, 40, false],
   ],
-  depth: 0.7,
+  depth: 0.81,
   x: 480,
   faceLeft: true,
-  foot0: 340,
+  // North leaves at the top of the steps, not the near lip of the path.
+  foot0: 268,
   foot1: 462,
+  fromNorth: 0.45,
   xMin: function () { return 40; },
   // The pond covers the right side until the near gray path.
-  xMax: function (d) { return d < 0.62 ? 470 : 820; },
-  eastMinDepth: 0.62,
+  xMax: function (d) { return d < 0.76 ? 470 : 820; },
+  eastMinDepth: 0.76,
   west: "forest",
   east: "scene",
   north: "shrine-hall",
