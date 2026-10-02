@@ -78,7 +78,7 @@
 
   const ACTIONS = [
     { id: "help", match: "help, what can i do, how do i play",
-      say: "Type what the prince should do. You can look from anywhere. Walk up to a person or a thing before you talk, take, or use it. Ask anyone what they like to talk about. Arrow keys still walk. The score is the case." },
+      say: "Type what the prince should do. You can look from anywhere. Walk up to someone and type talk with them. Choose a line in the conversation. Arrow keys still walk. The score is the case." },
     { id: "score", match: "score, how many points, what is my score",
       say: () => `Score: ${state.score} of ${MAX}.` },
     { id: "inventory", match: "inventory, what am i carrying, look in my pockets",
@@ -116,13 +116,6 @@
       when: (s) => !s.flags.ofuda,
       say: "You take the ofuda. The gravel looks as if it had never held it.",
       score: 3, once: "took_ofuda", flag: "ofuda", hide: "ofuda" },
-    { id: "talk_shizuka", room: "scene", match: "talk to shizuka, ask shizuka, talk to the lady, speak to the princess",
-      when: (s) => !s.flags.shizuka_gone,
-      say: "Shizuka does not look at you. \"I will not speak of the hall.\"",
-      score: 2, once: "asked_shizuka" },
-    { id: "talk_masahiro", room: "scene", match: "talk to masahiro, ask masahiro, talk to the onmyoji, ask the wizard",
-      say: "Masahiro does not turn from the trees. \"Something crossed the gravel. The paper is the only record. Myōen can read it.\"",
-      score: 3, once: "asked_masahiro" },
     { id: "stop_case", room: "scene", match: "stop investigating, abandon the case, leave the case, keep the capital",
       when: (s) => !s.won && (s.flags.saw_ofuda || s.flags.asked_masahiro),
       say: "You let the case stay open. Shizuka remains where she is, if she is still there. The bridge still ends at mid-span. That break is the evidence you refused to finish.",
@@ -159,27 +152,11 @@
       say: (s) => (s.flags.kagami ? "The mirror is in your hands. " : "") + "The mirror keeps the last face that stood here. It is not Shizuka's. A man's sleeve crosses the bronze.",
       score: 3, once: "saw_mirror" },
 
-    { id: "talk_aya", room: "sewing", match: "talk to aya, ask aya, talk to the seamstress, ask the woman",
-      say: "Aya looks up from the silk. \"I stitched the writing into the sensu. I was told it was a poem.\"",
-      score: 4, once: "asked_aya" },
-
     { id: "look_tachi", room: "storehouse", match: "look at the tachi, examine the sword, look at the sword, inspect the blade, examine the tachi",
       say: (s) => s.flags.tachi_held
         ? "The tachi is in your hands. It was never drawn. Whatever crossed the yard was not a thing a sword could cut."
         : "The tachi was never drawn. Whatever crossed the yard was not a thing a sword could cut.",
       score: 2, once: "saw_tachi", whenScore: (s) => !s.flags.tachi_held },
-
-    { id: "talk_myoen", room: "shrine-hall", match: "talk to myoen, ask myoen, talk to the priest, ask the priest",
-      say: (s) => s.flags.ofuda
-        ? "Myōen takes the paper and gives it back. \"This was meant to bind a thing that cannot be seen, heard, or touched. It failed when it was lifted off the gravel.\""
-        : "Myōen looks at your empty hands. \"Bring the paper from the yard.\"",
-      score: 5, once: "ofuda_read",
-      whenScore: (s) => s.flags.ofuda },
-
-    { id: "talk_enkei", room: "peak", match: "talk to enkei, ask enkei, talk to the monk, ask the old man",
-      when: (s) => !s.flags.heard_enkei,
-      say: "Enkei looks west along the ridge. \"I walked this once and stopped. The unseen thing is the prince's attention. Every room you finish comes loose. Read the fan in the hall, and the capital will not hold.\" When you blink, he is no longer on the apron.",
-      score: 5, once: "heard_enkei", hide: "enkei" },
 
     { id: "look_bridge", room: "bridge", match: "look, look around, look at the bridge, examine the planks",
       say: "The planks stop at mid-span. They were whole before you started asking questions.",
@@ -265,12 +242,12 @@
     if (state.won) return "The case has already ended. The score will keep.";
     if (id === "scene" && !f.ofuda) return "The paper on the gravel is the start. Look at it, then take it. Masahiro will say who can read it.";
     if (id === "scene" && f.shizuka_gone && !f.saw_empty_veranda) return "Look at the veranda.";
-    if (id === "shrine-hall" && !f.ofuda_read) return "Ask Myōen about the paper. He needs the ofuda in your hands.";
+    if (id === "shrine-hall" && !f.ofuda_read) return "Talk with Myōen about the paper. He needs the ofuda in your hands.";
     if (id === "hall" && !f.saw_sensu) return "Look at the fan on the boards.";
     if (id === "hall" && f.ofuda_read && f.heard_enkei) return "Read the sensu. That finishes the case, and spends the capital.";
-    if (id === "peak" && !f.heard_enkei) return "Ask Enkei why he stopped.";
+    if (id === "peak" && !f.heard_enkei) return "Talk with Enkei. Ask why he stopped.";
     if (id === "ladies") return "Look at the mirror.";
-    if (id === "sewing") return "Ask Aya what she stitched.";
+    if (id === "sewing") return "Talk with Aya about what she stitched.";
     if (id === "bridge") return "Look at where the planks stop.";
     if (id === "scene") return "You can abandon the case here, and leave the capital as it stands.";
     return "Walk. The shrine, the hall, and the peak are the three questions.";
@@ -322,6 +299,10 @@
   function targetOf(actionId) {
     if (Object.prototype.hasOwnProperty.call(SCRIPTED_NEAR, actionId)) return SCRIPTED_NEAR[actionId];
     const kind = actionId.split("_")[0];
+    if (actionId.startsWith("talk_")) {
+      const safe = actionId.slice(5);
+      return Object.keys(FOLK).find((key) => key.replace(/[^a-z0-9]/g, "") === safe) || safe;
+    }
     if (kind === "see" || kind === "look" || actionId === "greet_all") return null;
     if (kind === "topic") {
       const rest = actionId.slice(6);
@@ -364,24 +345,12 @@
       seen.add(id);
       list.push({ id, match: match.slice(0, 400) });
     }
-    const people = Object.keys(place).filter((name) => FOLK[name]);
+    const people = Object.keys(place).filter((name) => FOLK[name] && present(name));
     for (const name of people) {
       const safe = name.replace(/[^a-z0-9]/g, "");
+      const who = NAMES[name] || name;
       push("see_" + safe, "look at " + name + ", examine " + name + ", look at the " + name);
-      const woman = ["shizuka", "aya", "tamayori", "kura", "ichi", "shio", "ai", "nabe", "ito"].includes(name);
-      let greet = "greet " + name + ", hello " + name + ", say hello to " + name + ", bow to " + name;
-      greet += woman
-        ? ", greet the woman, greet the lady, hello woman, hello lady, greet her"
-        : ", greet the man, hello man, greet him";
-      if (people.length === 1) greet += ", hello, greetings, good evening, hail";
-      push("greet_" + safe, greet);
-      let likes = "what does " + name + " like to talk about, ask " + name + " what they like to talk about, what can " + name + " talk about";
-      if (people.length === 1) likes += ", what do you like to talk about, what can we talk about, what are your subjects";
-      push("likes_" + safe, likes);
-      for (const topic of FOLK[name].topics) push("topic_" + safe + "_" + topic.id, topic.match);
-    }
-    if (people.length > 1) {
-      push("greet_all", "hello, greetings, good evening, hail, greet everyone");
+      push("talk_" + safe, "talk with " + who + ", talk to " + who + ", speak with " + who + ", talk with " + name + ", talk to " + name);
     }
     for (const name of Object.keys(ITEM_WORDS)) {
       if (!place[name]) continue;
@@ -393,7 +362,7 @@
       const safe = name.replace(/[^a-z0-9]/g, "");
       push("see_" + safe, "look at the " + name + ", examine the " + name);
       push("nudge_" + safe, "move the " + name + ", push the " + name + ", shift the " + name);
-      if (deedFor(roomId(), name, "talk")) push("ask_" + safe, "talk to " + name + ", ask " + name);
+      if (!FOLK[name] && deedFor(roomId(), name, "talk")) push("ask_" + safe, "talk to " + name + ", ask " + name);
       if (deedFor(roomId(), name, "take")) push("pocket_" + safe, "take the " + name + ", get the " + name + ", pick up the " + name);
       if (deedFor(roomId(), name, "use")) push("try_" + safe, "use the " + name + ", ring the " + name + ", play the " + name + ", light the " + name + ", show the ofuda");
     }
@@ -430,11 +399,101 @@
     return typeof topic.say === "function" ? topic.say(state) : topic.say;
   }
 
+  function payOnce(flag, points) {
+    if (!flag || state.flags[flag]) return;
+    state.flags[flag] = true;
+    if (points) state.score += points;
+    save();
+    paintScore();
+  }
+
+  function noteCase(name, topicId) {
+    if (name === "shizuka" && topicId === "hall") payOnce("asked_shizuka", 2);
+    if (name === "masahiro" && (topicId === "paper" || topicId === "priest")) payOnce("asked_masahiro", 3);
+    if (name === "aya" && topicId === "sensu") payOnce("asked_aya", 4);
+    if (name === "myoen" && topicId === "paper" && state.flags.ofuda) payOnce("ofuda_read", 5);
+    if (name === "enkei") payOnce("heard_enkei", 5);
+  }
+
+  function openTalk(name, stage) {
+    if (document.getElementById("talk")) return;
+    const folk = FOLK[name];
+    if (!folk) return;
+    const deed = deedFor(roomId(), name, "talk");
+    if (deed) payOnce(deed.once, deed.score);
+    window.HeianTalking = true;
+    const line = document.getElementById("line");
+    if (line) line.disabled = true;
+    const who = NAMES[name] || name;
+    const box = document.createElement("div");
+    box.id = "talk";
+    const sheet = document.createElement("div");
+    sheet.className = "sheet";
+    const title = document.createElement("div");
+    title.className = "who";
+    title.textContent = who;
+    const scroll = document.createElement("div");
+    scroll.className = "scroll";
+    const choices = document.createElement("div");
+    choices.className = "choices";
+    sheet.append(title, scroll, choices);
+    box.append(sheet);
+    stage.append(box);
+
+    function say(cls, text) {
+      const p = document.createElement("p");
+      p.className = cls;
+      p.textContent = text;
+      scroll.append(p);
+      scroll.scrollTop = scroll.scrollHeight;
+    }
+
+    function close() {
+      window.HeianTalking = false;
+      box.remove();
+      if (name === "enkei" && state.flags.heard_enkei) {
+        hideNamed(stage, "enkei");
+        applyWorld(stage);
+      }
+      if (line) {
+        line.disabled = false;
+        line.focus();
+      }
+    }
+
+    say("them", folk.greet);
+    for (const topic of folk.topics) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "Ask about the " + topic.id + ".";
+      button.addEventListener("click", () => {
+        button.remove();
+        say("you", "Atsuhira: " + button.textContent);
+        const reply = typeof topic.say === "function" ? topic.say(state) : topic.say;
+        say("them", who + ": " + reply);
+        noteCase(name, topic.id);
+      });
+      choices.append(button);
+    }
+    const bye = document.createElement("button");
+    bye.type = "button";
+    bye.textContent = "That's all.";
+    bye.addEventListener("click", close);
+    choices.append(bye);
+  }
+
   function runMapped(actionId, stage) {
     const far = tooFar(actionId);
     if (far) {
       print(far);
       return;
+    }
+    if (actionId.startsWith("talk_")) {
+      const who = targetOf(actionId);
+      if (who && FOLK[who]) {
+        openTalk(who, stage);
+        return;
+      }
     }
     const about = folkLine(actionId);
     if (about) {
@@ -1315,7 +1374,10 @@
         save();
         busy = false;
         form.classList.remove("waiting");
-        input.focus();
+        if (!window.HeianTalking) {
+          input.disabled = false;
+          input.focus();
+        }
       }
     });
     input.disabled = true;
@@ -1392,5 +1454,5 @@
     save();
   }
 
-  window.HeianPlay = { boot, arrive, save };
+  window.HeianPlay = { boot, arrive, save, openTalk };
 })();

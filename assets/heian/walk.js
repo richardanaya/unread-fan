@@ -71,6 +71,7 @@
 
   const keys = {};
   addEventListener("keydown", (e) => {
+    if (window.HeianTalking) return;
     if (e.key.startsWith("Arrow")) {
       keys[e.key] = true;
       e.preventDefault();
